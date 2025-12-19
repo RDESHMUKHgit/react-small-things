@@ -1,10 +1,12 @@
 import React from 'react';
-import DragDrop from './DragDrop';
+import DragDropImage from './DragDropImage';
+import DragDropAudio from './DragDropAudio';
 
 const App = () => {
   return (
     <div className="">
-      <DragDrop />
+      <DragDropImage />
+      <DragDropAudio />
     </div>
   );
 };

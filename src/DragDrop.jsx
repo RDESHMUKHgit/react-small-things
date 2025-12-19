@@ -13,6 +13,7 @@ const DragDrop = () => {
     },
     maxSize: 2 * 1024 * 1024, // 2MB
     multiple: true,
+    maxFiles: 4,
 
     onDropAccepted: (acceptedFiles) => {
       setError('');
@@ -27,11 +28,14 @@ const DragDrop = () => {
 
     onDropRejected: (rejectedFiles) => {
       const reason = rejectedFiles[0].errors[0].code;
+      //       console.log(reason);
 
       if (reason === 'file-too-large') {
         setError('File size exceeds 2MB limit.');
       } else if (reason === 'file-invalid-type') {
         setError('Only image files are allowed.');
+      } else if (reason === 'too-many-files') {
+        setError('Only 4 files are allowed');
       } else {
         setError('File upload failed.');
       }
@@ -48,7 +52,7 @@ const DragDrop = () => {
   };
 
   return (
-    <section className="max-w-2xl mx-auto mt-10">
+    <section className="max-w-4xl mx-auto mt-10">
       {/* Drop Area */}
       <div
         {...getRootProps()}
@@ -92,8 +96,22 @@ const DragDrop = () => {
               <img
                 src={file.preview}
                 alt={file.name}
-                className="w-full h-32 object-cover"
+                title={file.name}
+                className="w-full h-52 object-cover"
               />
+
+              {/* File Info */}
+              <div className="p-2 text-xs bg-white">
+                <p
+                  className="font-medium text-gray-800 truncate"
+                  title={file.name}
+                >
+                  {file.name}
+                </p>
+                <p className="text-gray-500">
+                  {(file.size / 1024).toFixed(2)} KB
+                </p>
+              </div>
 
               {/* Remove Button */}
               <button
@@ -102,6 +120,7 @@ const DragDrop = () => {
                   removeFile(file.name);
                 }}
                 className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
+                title="Remove the file"
               >
                 <FiX size={14} />
               </button>
